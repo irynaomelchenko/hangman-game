@@ -42,7 +42,7 @@ export function Keyboard({ activeLetters, inactiveLetters, addGuessedLetter, dis
         justifyContent: 'center',
         gap: '.5rem',
         flexWrap: 'wrap',
-        maxWidth: '500px'
+        maxWidth: '640px'
     }}>
         {KEYS.map(key => {
             const isActive = activeLetters.includes(key)

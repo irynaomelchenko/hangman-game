@@ -2,6 +2,7 @@ import Particles from "@tsparticles/react";
 import { confetti, ConfettiFirstParam } from "@tsparticles/confetti";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import words from './wordList.json';
+import style from './App.module.css';
 import { HangmanDrawing } from "./HangmanDrawing";
 import { HangmanWord } from "./HangmanWord";
 import { Keyboard } from "./Keyboard";
@@ -11,13 +12,13 @@ function getWord() {
 }
 
 function App() {
-  const [wordToGuess, setWordToGuess] = useState(getWord)
+  const [wordToGuess, setWordToGuess] = useState(getWord);
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   const options: ConfettiFirstParam = useMemo(
     () => ({
         spread: 1000,
-        particleCount: 500,
+        particleCount: 1000,
         position: {
           x: 50,
           y: 0,
@@ -81,38 +82,23 @@ function App() {
         id="tsparticles"
         options={options}
       />)}
-      <div style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "2rem"
-      }}>
-        <div style={{
-          fontSize: "2rem",
-        }}>
+      <div className={style["outer-wrapper"]}>
+        <div className={style.message}>
           {!isWinner && !isLoser && 'Guess the word'}
           {isWinner && 'Winner! Refresh or press Enter to try again'}
           {isLoser && 'Nice try. Refresh or press Enter to try again'}
         </div>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          gap: '6rem',
-          width: '100%'
-        }}>
-          <div>
-            <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
+        <div className={style.wrapper} >
+          <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
+          <div className={style.container}>
             <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} wordToGuess={wordToGuess}/>
+            <Keyboard
+              disabled={isWinner || isLoser}
+              activeLetters={guessedLetters.filter(letter => wordToGuess.includes(letter))}
+              inactiveLetters={incorrectLetters}
+              addGuessedLetter={addGuessedLetter}
+            />
           </div>
-          <Keyboard
-            disabled={isWinner || isLoser}
-            activeLetters={guessedLetters.filter(letter => wordToGuess.includes(letter))}
-            inactiveLetters={incorrectLetters}
-            addGuessedLetter={addGuessedLetter}
-          />
         </div>
       </div>
     </>
